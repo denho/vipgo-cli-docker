@@ -10,5 +10,10 @@ RUN $HOME/.cargo/bin/cargo install --features=ssl websocat
 RUN npm install -g @automattic/vip
 
 RUN npm install -g @automattic/vip-go-internal-cli
- 
-RUN vipgo config set PROXY=socks://192.168.65.2:8080
+
+RUN apt install -y host
+
+RUN ip_address=$(host host.docker.internal | grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+') \
+    && vipgo config set PROXY=socks://$ip_address:8080
+
+
